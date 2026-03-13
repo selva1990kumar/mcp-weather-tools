@@ -12,7 +12,7 @@
 
 **[0:10–0:25] Architecture**
 
-> "Here's what I built. An MCP server that registers a weather tool. When an AI assistant — like Claude in Cursor — needs live weather data, it sends a JSON-RPC request to my server. The server validates the input with Zod, calls the Open-Meteo API, and returns structured JSON that the LLM uses to compose its answer."
+> "Here's what I built. A custom MCP server that registers a weather tool, plus integration with Anthropic's official filesystem and memory servers. When an AI assistant — like Claude in Cursor — needs live weather data, it sends a JSON-RPC request to my server. The server validates the input with Zod, calls the Open-Meteo API, and returns structured JSON. For file operations or remembering context, it uses the official filesystem and memory MCP servers."
 
 *(Show architecture diagram on screen)*
 

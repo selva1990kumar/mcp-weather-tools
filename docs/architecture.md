@@ -51,8 +51,7 @@ flowchart TB
         LLM[Claude / GPT / LLM]
     end
 
-    subgraph SERVER["MCP Server Layer — server.ts"]
-        direction TB
+    subgraph CUSTOM["Custom MCP — server.ts"]
         REGISTRY[Tool Registry]
         TOOL["Tool: getWeatherDataByCity"]
         RES1["Resource: weather://cities"]
@@ -64,7 +63,12 @@ flowchart TB
         REGISTRY --- PROMPT
     end
 
-    subgraph LOGIC["Business Logic Layer — weather.ts"]
+    subgraph OFFICIAL["Official MCP Servers"]
+        FS[Filesystem MCP\nread/write/search files]
+        MEM[Memory MCP\npersistent knowledge graph]
+    end
+
+    subgraph LOGIC["Business Logic — weather.ts"]
         GEO[Geocoding]
         FORECAST[Forecast]
     end
@@ -75,7 +79,8 @@ flowchart TB
 
     U <-->|"natural language"| CURSOR
     CURSOR <-->|"messages + tool results"| LLM
-    MCP_CLIENT <-->|"JSON-RPC over stdio"| REGISTRY
+    MCP_CLIENT <-->|"JSON-RPC stdio"| CUSTOM
+    MCP_CLIENT <-->|"JSON-RPC stdio"| OFFICIAL
     TOOL --> GEO --> API
     TOOL --> FORECAST --> API
 ```
@@ -86,7 +91,7 @@ flowchart TB
 
 ### Initialization Sequence
 
-When the AI client starts, it spawns the MCP server as a subprocess and discovers its capabilities:
+When the AI client starts, it spawns each MCP server as a subprocess and discovers capabilities from all of them (custom weather, filesystem, memory). Below is the flow for the custom server; the same pattern applies to filesystem and memory:
 
 ```mermaid
 sequenceDiagram
@@ -258,7 +263,26 @@ Both patterns call the same `getWeatherByCity()` function from `weather.ts`.
 
 ## Third-Party MCP Integration
 
-The project supports **MCP servers from major companies** (Anthropic, Microsoft) alongside the custom server. Example config:
+The project supports **MCP servers from major companies** (Anthropic, Microsoft) alongside the custom server.
+
+```mermaid
+flowchart LR
+    subgraph CURSOR["Cursor IDE"]
+        LLM[LLM]
+    end
+
+    subgraph MCP_SERVERS["MCP Servers"]
+        CUSTOM[Custom\nweather-data-fetcher]
+        FS[Filesystem\n@modelcontextprotocol/server-filesystem]
+        MEM[Memory\n@modelcontextprotocol/server-memory]
+    end
+
+    LLM -->|"weather tool"| CUSTOM
+    LLM -->|"read/write files"| FS
+    LLM -->|"remember/recall"| MEM
+```
+
+**Example config:**
 
 ```json
 {

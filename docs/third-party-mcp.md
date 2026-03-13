@@ -2,6 +2,23 @@
 
 This project demonstrates **dual MCP integration**: a custom local MCP server and **MCP servers from major companies** (Anthropic, Microsoft). This shows that the system can use both custom and external enterprise MCPs.
 
+```mermaid
+flowchart LR
+    subgraph CURSOR["Cursor IDE"]
+        LLM[LLM]
+    end
+
+    subgraph MCP_SERVERS["MCP Servers"]
+        CUSTOM[weather-data-fetcher\nCustom]
+        FS[filesystem\nAnthropic]
+        MEM[memory\nAnthropic]
+    end
+
+    LLM -->|"weather, resources, prompts"| CUSTOM
+    LLM -->|"read/write/search files"| FS
+    LLM -->|"remember/recall"| MEM
+```
+
 ---
 
 ## MCP Servers in This Project

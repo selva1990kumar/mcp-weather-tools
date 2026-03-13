@@ -48,7 +48,7 @@ The AI client (Cursor) receives this message and prepares to send it to the LLM.
 }
 ```
 
-The client includes the tool definitions that it discovered from the MCP server during initialization. The LLM uses these definitions to decide whether to call a tool.
+The client includes tool definitions from all configured MCP servers (custom weather, filesystem, memory) discovered during initialization. The LLM uses these definitions to decide which tool to call.
 
 ---
 

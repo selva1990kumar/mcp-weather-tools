@@ -29,20 +29,23 @@ flowchart LR
     User([User]) --> Client[AI Client\nCursor / React App]
     Client --> LLM[LLM\nClaude / GPT]
     LLM -->|tool_call| Client
-    Client -->|JSON-RPC\nstdio| MCP[MCP Server\nserver.ts]
-    MCP --> Tool[getWeatherDataByCity]
-    MCP --> Resource["weather://cities\nweather://help"]
-    MCP --> Prompt[weather-inquiry]
+    Client -->|JSON-RPC\nstdio| MCP1[Custom MCP\nweather-data-fetcher]
+    Client -->|JSON-RPC\nstdio| MCP2[Filesystem MCP]
+    Client -->|JSON-RPC\nstdio| MCP3[Memory MCP]
+    MCP1 --> Tool[getWeatherDataByCity]
+    MCP1 --> Resource["weather://cities\nweather://help"]
+    MCP1 --> Prompt[weather-inquiry]
     Tool -->|HTTP| API[Open-Meteo API]
     API --> Tool
-    Tool --> MCP
-    MCP --> Client
+    MCP1 --> Client
+    MCP2 --> Client
+    MCP3 --> Client
     Client --> LLM
     LLM --> Client
     Client --> User
 ```
 
-**Flow:** User asks a question → LLM determines it needs live data → MCP client sends a JSON-RPC request to the MCP server over stdio → server executes the tool (calls Open-Meteo API) → structured response flows back → LLM composes a natural language answer.
+**Flow:** User asks a question → LLM determines which tool to use → MCP client sends JSON-RPC to the appropriate server (custom weather, filesystem, or memory) → server executes → structured response flows back → LLM composes a natural language answer.
 
 ---
 
@@ -77,8 +80,6 @@ flowchart LR
 ---
 
 ## Installation & Running
-
-> **Quick reference:** See [RUN.md](RUN.md) for copy-paste commands.
 
 ```bash
 # Clone the repository
@@ -174,12 +175,12 @@ mcp-weather-tools/
 │   └── vite.config.ts     # Dev proxy /api → localhost:3001
 ├── docs/
 │   ├── architecture.md    # Detailed MCP architecture explanation
+│   ├── third-party-mcp.md # Using official MCP servers (filesystem, memory)
 │   ├── adding-tools.md    # Guide: how to add new tools to this server
 │   ├── request-flow.md    # Step-by-step MCP request lifecycle
 │   ├── demo.md            # Example conversation walkthrough
 │   └── demo-video-script.md
 ├── SECURITY.md            # AI tool system security considerations
-├── RUN.md                 # Quick run instructions
 ├── package.json
 ├── tsconfig.json
 └── README.md
