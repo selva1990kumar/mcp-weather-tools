@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "weather-data-fetcher": {
+      "command": "npx",
+      "args": ["tsx", "server.ts"],
+      "cwd": ".",
+      "env": {}
+    },
+    "weather-mcp": {
+      "command": "npx",
+      "args": ["-y", "@dangahagan/weather-mcp@latest"]
+    }
+  }
+}

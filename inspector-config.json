@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "weather-data-fetcher": {
+      "command": "npx",
+      "args": ["tsx", "server.ts"],
+      "cwd": "c:/Users/Selva/AI/MCP",
+      "env": {}
+    }
+  }
+}
