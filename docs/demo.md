@@ -189,21 +189,21 @@ The user selects the **"Ask about weather"** prompt from the prompts list in the
 
 ---
 
-## Conversation 5: Third-Party MCP (Extended Weather)
+## Conversation 5: Official MCP Servers (Big Companies)
 
-With `@dangahagan/weather-mcp` configured alongside our custom server, you can ask:
+With Anthropic’s official MCP servers configured alongside our custom server, you can ask:
 
 ### User
 
-> What's the 7-day forecast for Mumbai? Include air quality if possible.
+> Read the contents of docs/architecture.md and summarize the main flow.
 
 ### What happens behind the scenes
 
-The LLM may call tools from the **third-party** `weather-mcp` server:
-- `forecast` — multi-day forecasts
-- `air_quality` — AQI and pollutant data
+The LLM may call tools from the **official** `filesystem` server ([@modelcontextprotocol/server-filesystem](https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem)):
+- `read_file` — read file contents
+- `list_directory` — list files in a directory
 
-This demonstrates that the setup supports **both** custom and external MCP servers. See [Third-Party MCP Integration](third-party-mcp.md).
+This demonstrates that the setup supports **both** custom and big-company MCP servers. See [Third-Party MCP Integration](third-party-mcp.md).
 
 ---
 

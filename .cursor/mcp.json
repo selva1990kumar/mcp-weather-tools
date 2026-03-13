@@ -6,9 +6,13 @@
       "cwd": ".",
       "env": {}
     },
-    "weather-mcp": {
+    "filesystem": {
       "command": "npx",
-      "args": ["-y", "@dangahagan/weather-mcp@latest"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\Selva\\AI\\MCP"]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }

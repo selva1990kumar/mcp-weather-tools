@@ -180,9 +180,8 @@ function App() {
               for Cursor/Inspector and uses the same logic.
             </p>
             <p>
-              <strong>Third-party MCP:</strong> Cursor can run both our custom server and
-              external MCPs (e.g. <code>@dangahagan/weather-mcp</code> for forecasts, air
-              quality). See docs/third-party-mcp.md.
+              <strong>Official MCP servers:</strong> Cursor can run both our custom server and
+              Anthropic’s official servers (<code>filesystem</code>, <code>memory</code>). See docs/third-party-mcp.md.
             </p>
             <h3>Tech Stack</h3>
             <ul>

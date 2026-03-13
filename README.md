@@ -50,7 +50,7 @@ flowchart LR
 
 | Capability | Description |
 |------------|-------------|
-| **Custom + Third-Party MCP** | Local MCP server plus external servers (e.g. [@dangahagan/weather-mcp](https://www.npmjs.com/package/@dangahagan/weather-mcp)); showcases dual integration |
+| **Custom + Official MCP** | Local MCP server plus Anthropic’s official servers ([filesystem](https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem), [memory](https://www.npmjs.com/package/@modelcontextprotocol/server-memory)); showcases big-company MCP integration |
 | **Tool Registration** | Declarative tool definitions with Zod schema validation on inputs |
 | **Structured Responses** | Tools return typed JSON that the LLM can reliably parse |
 | **Modular Tool Design** | Shared business logic (`weather.ts`) consumed by both MCP server and REST API |
@@ -76,11 +76,13 @@ flowchart LR
 
 ---
 
-## Installation
+## Installation & Running
+
+> **Quick reference:** See [RUN.md](RUN.md) for copy-paste commands.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/mcp-weather-tools.git
+git clone https://github.com/selva/mcp-weather-tools.git
 cd mcp-weather-tools
 
 # Install server dependencies
@@ -95,24 +97,10 @@ cd ..
 ## Running
 
 ```bash
-# Option 1: Run both API + React app (recommended)
 npm run demo
-
-# Option 2: Run separately
-npm run api      # Terminal 1 — Express API on :3001
-npm run client   # Terminal 2 — React app on :5173
-
-# Option 3: MCP server only (for Cursor / Inspector)
-npm run start
 ```
 
-| Command | What it does |
-|---------|-------------|
-| `npm run demo` | Starts Express API + React app concurrently |
-| `npm run api` | Express REST API on port 3001 |
-| `npm run client` | Vite dev server on port 5173 |
-| `npm run start` | MCP server via stdio (for AI clients) |
-| `npm run inspector` | MCP Inspector for debugging |
+Then open **http://localhost:5173**
 
 ---
 
@@ -191,7 +179,7 @@ mcp-weather-tools/
 │   ├── demo.md            # Example conversation walkthrough
 │   └── demo-video-script.md
 ├── SECURITY.md            # AI tool system security considerations
-├── portfolio-summary.md   # LinkedIn / portfolio project summary
+├── RUN.md                 # Quick run instructions
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -234,9 +222,13 @@ Add to `.cursor/mcp.json`:
       "args": ["tsx", "server.ts"],
       "cwd": "/path/to/mcp-weather-tools"
     },
-    "weather-mcp": {
+    "filesystem": {
       "command": "npx",
-      "args": ["-y", "@dangahagan/weather-mcp@latest"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/path/to/your/project"]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }
@@ -244,9 +236,9 @@ Add to `.cursor/mcp.json`:
 
 This config runs **both**:
 - **Custom server** (`weather-data-fetcher`) — our local MCP with `getWeatherDataByCity`, resources, prompts
-- **Third-party server** (`weather-mcp`) — [@dangahagan/weather-mcp](https://www.npmjs.com/package/@dangahagan/weather-mcp) for extended weather (forecasts, historical data, air quality; no API keys)
+- **Official servers** (`filesystem`, `memory`) — Anthropic’s [@modelcontextprotocol](https://github.com/modelcontextprotocol/servers) servers for file operations and persistent memory
 
-Then ask in Cursor chat: *"What's the weather in London?"* or *"What's the 7-day forecast for Tokyo?"* — the LLM can call tools from either server.
+Then ask in Cursor chat: *"What's the weather in London?"* or *"Read docs/architecture.md"* — the LLM can call tools from any server.
 
 ---
 
@@ -287,8 +279,6 @@ See [SECURITY.md](SECURITY.md) for a detailed analysis. Key points:
 | [Request Flow](docs/request-flow.md) | Step-by-step lifecycle of an MCP request |
 | [Demo Walkthrough](docs/demo.md) | Example conversations showing tool calls in action |
 | [Security](SECURITY.md) | Threat model and mitigation strategies for AI tool systems |
-| [Portfolio Summary](portfolio-summary.md) | LinkedIn/portfolio-ready project description |
-
 ---
 
 ## License

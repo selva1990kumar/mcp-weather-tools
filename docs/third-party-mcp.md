@@ -1,22 +1,24 @@
 # Third-Party MCP Integration
 
-This project demonstrates **dual MCP integration**: a custom local MCP server and third-party external MCP servers. This shows that the system is capable of using both custom and external MCPs in a single setup.
+This project demonstrates **dual MCP integration**: a custom local MCP server and **MCP servers from major companies** (Anthropic, Microsoft). This shows that the system can use both custom and external enterprise MCPs.
 
 ---
 
 ## MCP Servers in This Project
 
-| Server | Type | Description |
-|--------|------|-------------|
-| **weather-data-fetcher** | Custom (local) | Our own MCP server — geocodes city, fetches live weather via Open-Meteo; exposes tools, resources, and prompts |
-| **weather-mcp** | Third-party (external) | [@dangahagan/weather-mcp](https://www.npmjs.com/package/@dangahagan/weather-mcp) — comprehensive weather server with forecasts, historical data, alerts, air quality, marine conditions; no API keys |
+| Server | Type | Provider | Description |
+|--------|------|----------|-------------|
+| **weather-data-fetcher** | Custom (local) | This project | Our own MCP — geocodes city, fetches live weather via Open-Meteo; tools, resources, prompts |
+| **filesystem** | Official | Anthropic / MCP | [@modelcontextprotocol/server-filesystem](https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem) — read/write files, directories, search |
+| **memory** | Official | Anthropic / MCP | [@modelcontextprotocol/server-memory](https://www.npmjs.com/package/@modelcontextprotocol/server-memory) — persistent knowledge graph memory |
 
 ---
 
-## Why Both?
+## Why Big-Company MCP Servers?
 
-- **Custom server**: Demonstrates building an MCP from scratch with tools, resources, and prompts — full control and learning.
-- **Third-party server**: Demonstrates integrating external MCP servers — extensibility and ecosystem compatibility.
+- **Custom server**: Demonstrates building an MCP from scratch — full control and learning.
+- **Official MCP servers**: Anthropic’s official reference servers (from [modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)) — widely used, enterprise-grade.
+- **Microsoft**: Also offers Azure, Microsoft Learn, and Microsoft Fabric MCP servers (see [microsoft/mcp](https://github.com/microsoft/mcp)).
 
 ---
 
@@ -31,9 +33,13 @@ This project demonstrates **dual MCP integration**: a custom local MCP server an
       "cwd": ".",
       "env": {}
     },
-    "weather-mcp": {
+    "filesystem": {
       "command": "npx",
-      "args": ["-y", "@dangahagan/weather-mcp@latest"]
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "C:\\Users\\Selva\\AI\\MCP"]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }
@@ -41,30 +47,31 @@ This project demonstrates **dual MCP integration**: a custom local MCP server an
 
 With this config, Cursor will:
 - Run your custom server for `getWeatherDataByCity`, `weather://cities`, `weather://help`, and `weather-inquiry` prompt
-- Run the third-party server for extended weather tools (forecasts, historical data, alerts, etc.)
+- Run the **filesystem** server for file operations (read, write, search) within the project directory
+- Run the **memory** server for persistent memory across conversations
 
 ---
 
-## Example: Using the Third-Party Weather MCP
+## Example: Using Official MCP Servers
 
 Once configured, you can ask in Cursor:
 
-- *"What's the 7-day forecast for Tokyo?"* — uses `weather-mcp` forecast tool
-- *"Get air quality for Mumbai"* — uses `weather-mcp` air quality tool
-- *"What's the weather in London right now?"* — can use either server (both support current conditions)
+- *"What's the weather in London?"* — uses `weather-data-fetcher` (custom)
+- *"Read the contents of docs/architecture.md"* — uses `filesystem` (Anthropic)
+- *"Remember that I prefer Celsius for weather"* — uses `memory` (Anthropic)
+- *"List files in the api folder"* — uses `filesystem` (Anthropic)
 
 ---
 
-## Adding More Third-Party MCP Servers
+## Other Big-Company MCP Servers
 
-You can add other official or community MCP servers. Examples:
-
-| Server | Command | Use Case |
-|--------|---------|----------|
-| **@modelcontextprotocol/server-filesystem** | `npx -y @modelcontextprotocol/server-filesystem <path>` | Read/write files, directory operations |
-| **@modelcontextprotocol/server-everything** | `npx -y @modelcontextprotocol/server-everything` | Protocol testing (all MCP features) |
-
-Add any server to `mcpServers` in `.cursor/mcp.json` — Cursor loads all configured servers and the LLM can call tools from any of them.
+| Server | Provider | Command | Notes |
+|--------|----------|---------|-------|
+| **server-filesystem** | Anthropic | `npx -y @modelcontextprotocol/server-filesystem <path>` | Read/write files |
+| **server-memory** | Anthropic | `npx -y @modelcontextprotocol/server-memory` | Persistent memory |
+| **server-github** | Anthropic | `npx -y @modelcontextprotocol/server-github` | Requires `GITHUB_PERSONAL_ACCESS_TOKEN` |
+| **server-slack** | Anthropic | `npx -y @modelcontextprotocol/server-slack` | Requires Slack OAuth |
+| **Microsoft Learn** | Microsoft | See [microsoft/mcp](https://github.com/microsoft/mcp) | Docs search, code samples |
 
 ---
 

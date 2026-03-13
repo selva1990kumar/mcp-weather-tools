@@ -258,18 +258,19 @@ Both patterns call the same `getWeatherByCity()` function from `weather.ts`.
 
 ## Third-Party MCP Integration
 
-The project supports **external MCP servers** alongside the custom server. Example config:
+The project supports **MCP servers from major companies** (Anthropic, Microsoft) alongside the custom server. Example config:
 
 ```json
 {
   "mcpServers": {
     "weather-data-fetcher": { "command": "npx", "args": ["tsx", "server.ts"], "cwd": "." },
-    "weather-mcp": { "command": "npx", "args": ["-y", "@dangahagan/weather-mcp@latest"] }
+    "filesystem": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem", "<path>"] },
+    "memory": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-memory"] }
   }
 }
 ```
 
 - **Custom server** (`weather-data-fetcher`): Our tools, resources, prompts.
-- **Third-party server** (`weather-mcp`): Extended weather (forecasts, historical data, air quality).
+- **Official servers** (`filesystem`, `memory`): Anthropic’s reference MCP servers.
 
 See [Third-Party MCP Integration](third-party-mcp.md) for details.
