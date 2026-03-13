@@ -174,11 +174,12 @@ mcp-weather-tools/
 │   │   └── api.ts         # Typed fetch wrappers for REST endpoints
 │   └── vite.config.ts     # Dev proxy /api → localhost:3001
 ├── docs/
-│   ├── architecture.md    # Detailed MCP architecture explanation
+│   ├── images/            # Screenshots (MCP Inspector, etc.)
+│   ├── architecture.md   # Detailed MCP architecture explanation
 │   ├── third-party-mcp.md # Using official MCP servers (filesystem, memory)
-│   ├── adding-tools.md    # Guide: how to add new tools to this server
-│   ├── request-flow.md    # Step-by-step MCP request lifecycle
-│   ├── demo.md            # Example conversation walkthrough
+│   ├── adding-tools.md   # Guide: how to add new tools to this server
+│   ├── request-flow.md   # Step-by-step MCP request lifecycle
+│   ├── demo.md           # Example conversation walkthrough
 │   └── demo-video-script.md
 ├── SECURITY.md            # AI tool system security considerations
 ├── package.json
@@ -240,6 +241,20 @@ This config runs **both**:
 - **Official servers** (`filesystem`, `memory`) — Anthropic’s [@modelcontextprotocol](https://github.com/modelcontextprotocol/servers) servers for file operations and persistent memory
 
 Then ask in Cursor chat: *"What's the weather in London?"* or *"Read docs/architecture.md"* — the LLM can call tools from any server.
+
+---
+
+## MCP Inspector
+
+Use the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to debug and test the server — call tools, read resources, and try prompts without Cursor.
+
+```bash
+npm run inspector
+```
+
+This opens a web UI where you can list and invoke tools, read resources (`weather://cities`, `weather://help`), and test the `weather-inquiry` prompt with any city.
+
+![MCP Inspector — weather-inquiry prompt](docs/images/mcp-inspector.png)
 
 ---
 
